@@ -1,35 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, MapPin, Clock, Calendar } from "lucide-react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { mockServices } from "@/data/mock-services"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, MapPin, Clock, Calendar } from "lucide-react";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { mockServices } from "@/data/mock-services";
+import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 
 export default function Home() {
-  const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [location, setLocation] = useState("")
-  const [date, setDate] = useState("")
-  const [time, setTime] = useState("")
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   // Функция для выполнения поиска
   const handleSearch = () => {
-    const params = new URLSearchParams()
+    const params = new URLSearchParams();
 
-    if (searchQuery) params.append("query", searchQuery)
-    if (location) params.append("location", location)
-    if (date) params.append("date", date)
-    if (time) params.append("time", time)
+    if (searchQuery) params.append("query", searchQuery);
+    if (location) params.append("location", location);
+    if (date) params.append("date", date);
+    if (time) params.append("time", time);
 
-    router.push(`/search?${params.toString()}`)
-  }
+    router.push(`/search?${params.toString()}`);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -53,7 +60,9 @@ export default function Home() {
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 Запишись на массаж с максимальной скидкой прямо сейчас
               </h1>
-              <p className="text-xl text-muted-foreground">Найдите ближайшие свободные окна со скидками до 50%</p>
+              <p className="text-xl text-muted-foreground">
+                Найдите ближайшие свободные окна со скидками до 50%
+              </p>
               <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 <Button
                   size="lg"
@@ -145,17 +154,35 @@ export default function Home() {
         {/* Map Section */}
         <section id="hot-deals" className="py-16 bg-gray-50 dark:bg-gray-900">
           <div className="container">
-            <h2 className="text-3xl font-bold text-center mb-10">Ближайшие горящие окна на карте</h2>
+            <h2 className="text-3xl font-bold text-center mb-10">
+              Ближайшие горящие окна на карте
+            </h2>
             <div className="relative h-[400px] w-full rounded-xl overflow-hidden border shadow-sm">
-              <Image
-                src="/placeholder.svg?height=400&width=1200"
-                alt="Карта с салонами"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-medium">Карта Яндекс</span>
-              </div>
+              <YMaps
+                query={{
+                  apikey: "4db7472d-2936-422d-9f44-ff9da9481d65",
+                  lang: "ru_RU",
+                }}
+              >
+                <Map
+                  defaultState={{
+                    center: [55.751574, 37.573856],
+                    zoom: 10,
+                  }}
+                  width="100%"
+                  height="100%"
+                >
+                  <Placemark
+                    geometry={[55.751574, 37.573856]}
+                    properties={{
+                      balloonContent: 'Массажный салон "Релакс"',
+                    }}
+                    options={{
+                      preset: "islands#blueMassageIcon",
+                    }}
+                  />
+                </Map>
+              </YMaps>
             </div>
             <div className="mt-8 text-center">
               <Button
@@ -171,7 +198,9 @@ export default function Home() {
         {/* Popular Salons */}
         <section id="salons" className="py-16">
           <div className="container">
-            <h2 className="text-3xl font-bold text-center mb-10">Популярные салоны рядом с вами</h2>
+            <h2 className="text-3xl font-bold text-center mb-10">
+              Популярные салоны рядом с вами
+            </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3, 4, 5, 6].map((salon) => (
                 <div
@@ -190,8 +219,12 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="p-4">
-                    <h3 className="font-semibold text-lg">Салон красоты "Релакс {salon}"</h3>
-                    <p className="text-muted-foreground mt-1">ул. Примерная, д. {salon}</p>
+                    <h3 className="font-semibold text-lg">
+                      Салон красоты "Релакс {salon}"
+                    </h3>
+                    <p className="text-muted-foreground mt-1">
+                      ул. Примерная, д. {salon}
+                    </p>
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center">
                         <div className="flex items-center">
@@ -212,7 +245,9 @@ export default function Home() {
                           <span className="ml-1 text-sm">4.{salon}</span>
                         </div>
                         <span className="mx-2 text-muted-foreground">•</span>
-                        <span className="text-sm text-muted-foreground">{20 + salon} отзывов</span>
+                        <span className="text-sm text-muted-foreground">
+                          {20 + salon} отзывов
+                        </span>
                       </div>
                       <Link href={`/salon/${salon}`}>
                         <Button
@@ -234,24 +269,32 @@ export default function Home() {
         {/* How it works */}
         <section className="py-16 bg-gray-50 dark:bg-gray-900">
           <div className="container">
-            <h2 className="text-3xl font-bold text-center mb-12">Как это работает</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Как это работает
+            </h2>
             <div className="grid gap-8 md:grid-cols-3">
               <div className="flex flex-col items-center text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 text-teal-600 mb-4 dark:bg-teal-900 dark:text-teal-300">
                   <Search className="h-8 w-8" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Выберите удобное предложение со скидкой</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Выберите удобное предложение со скидкой
+                </h3>
                 <p className="text-muted-foreground">
-                  Найдите ближайшие салоны с горящими окнами и выберите подходящее время
+                  Найдите ближайшие салоны с горящими окнами и выберите
+                  подходящее время
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 text-teal-600 mb-4 dark:bg-teal-900 dark:text-teal-300">
                   <Calendar className="h-8 w-8" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Забронируйте горящее окно</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Забронируйте горящее окно
+                </h3>
                 <p className="text-muted-foreground">
-                  Быстро забронируйте выбранное время в пару кликов без звонков и ожиданий
+                  Быстро забронируйте выбранное время в пару кликов без звонков
+                  и ожиданий
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
@@ -271,9 +314,12 @@ export default function Home() {
                     <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Наслаждайтесь массажем по выгодной цене</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Наслаждайтесь массажем по выгодной цене
+                </h3>
                 <p className="text-muted-foreground">
-                  Получите качественный сервис со скидкой до 50% в удобное для вас время
+                  Получите качественный сервис со скидкой до 50% в удобное для
+                  вас время
                 </p>
               </div>
             </div>
@@ -283,5 +329,5 @@ export default function Home() {
 
       <Footer />
     </div>
-  )
+  );
 }
