@@ -13,7 +13,7 @@ export default function SalonPage({ params }: { params: { id: string } }) {
   // В реальном приложении здесь был бы запрос к API для получения данных о салоне
   const salon = {
     id: params.id,
-    name: `Салон красоты "Релакс ${params.id}"`,
+    name: `Салон красоты "Релакс"`,
     rating: 4.8,
     reviewCount: 124,
     address: "ул. Примерная, д. 15",
